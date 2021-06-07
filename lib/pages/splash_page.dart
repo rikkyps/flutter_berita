@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../shared.dart';
+import 'main_page.dart';
 
 class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.amber[300],
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -33,7 +34,9 @@ class SplashPage extends StatelessWidget {
               child: Text(
                 'Portal Berita Indonesia\nTrusted and Updated',
                 style: primaryTextStyle.copyWith(
-                    fontSize: 24, fontWeight: FontWeight.w500),
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             SizedBox(
@@ -42,11 +45,11 @@ class SplashPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: defaultMargin),
               child: Text(
-                'Kumpulan berita terupdate\ndalam negri dalam genggaman',
+                'Kumpulan berita terupdate\nIndonesia dalam genggaman',
                 style: primaryTextStyle.copyWith(
                     fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.grey),
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
               ),
             ),
             SizedBox(
@@ -68,8 +71,24 @@ class SplashPage extends StatelessWidget {
                       fontSize: 18,
                       fontWeight: FontWeight.w500),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+                },
               ),
+            ),
+            Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Disusun untuk memenuhi tugas UTS Dzikrulloh Idfi',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.black
+                  ),
+                )
+              ],
             )
           ],
         ),

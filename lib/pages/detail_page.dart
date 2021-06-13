@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import '../models/news.dart';
 import 'package:flutter_berita/shared.dart';
 
 class DetailPage extends StatelessWidget {
+  final News news;
+
+  DetailPage(this.news);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +44,9 @@ class DetailPage extends StatelessWidget {
               width: MediaQuery.of(context).size.width - (2 * defaultMargin),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('assets/images/highlight_banner.jpg'),
+                      image: (news.imageUrl != null)
+                          ? NetworkImage(news.imageUrl)
+                          : AssetImage('assets/images/highlight_banner.jpg'),
                       fit: BoxFit.cover),
                   borderRadius: BorderRadius.circular(30)),
             ),
@@ -51,10 +57,10 @@ class DetailPage extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: defaultMargin),
               width: MediaQuery.of(context).size.width - (2 * defaultMargin),
               child: Text(
-                'Contact Lost With Sriwijaya Air Boeing 737-500 After Take Off',
+                news.title,
                 style: primaryTextStyle.copyWith(
                     fontSize: 20, fontWeight: FontWeight.w600),
-                maxLines: 2,
+                maxLines: 5,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -77,12 +83,17 @@ class DetailPage extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        'Jhon Smith',
-                        style: primaryTextStyle.copyWith(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.grey),
+                      Container(
+                        width: (MediaQuery.of(context).size.width - (2 * defaultMargin)) / 2 - 40 - 20,
+                        child: Text(
+                          (news.author != null) ? news.author : 'Unknown',
+                          style: primaryTextStyle.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w300,
+                              color: Colors.grey),
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        ),
                       ),
                     ],
                   ),
@@ -112,12 +123,16 @@ class DetailPage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: defaultMargin),
               width: MediaQuery.of(context).size.width - (2 * defaultMargin),
               child: Text(
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                style:
-                    primaryTextStyle.copyWith(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
+                news.description ??= '-',
+                style: primaryTextStyle.copyWith(
+                    fontSize: 14,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w400),
               ),
             ),
-            SizedBox(height: 30,)
+            SizedBox(
+              height: 30,
+            )
           ],
         ),
       ),

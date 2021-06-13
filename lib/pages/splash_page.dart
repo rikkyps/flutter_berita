@@ -72,24 +72,11 @@ class SplashPage extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MainPage()));
                 },
               ),
             ),
-            Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Disusun untuk memenuhi tugas UTS Dzikrulloh Idfi',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.black
-                  ),
-                )
-              ],
-            )
           ],
         ),
       ),

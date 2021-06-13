@@ -2,15 +2,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../models/news.dart';
+import '../models/trending.dart';
+import 'package:flutter_berita/bloc/news_bloc.dart';
 import 'package:flutter_berita/shared.dart';
 import 'package:flutter_berita/widgets/category_item.dart';
 import 'package:flutter_berita/widgets/news_item.dart';
-
-import 'detail_page.dart';
+import 'package:flutter_berita/widgets/trending_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    context.read<NewsBloc>().add(GetNews());
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -72,75 +76,20 @@ class MainPage extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(16)),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DetailPage()));
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 160,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  'assets/images/highlight_banner.jpg'),
-                              fit: BoxFit.cover)),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      width: MediaQuery.of(context).size.width -
-                          (2 * defaultMargin) -
-                          (2 * 10),
-                      child: Text(
-                        'Contact Lost With Sriwijaya Air\nBoeing 737-500 After Take Off',
-                        style: primaryTextStyle.copyWith(
-                            fontSize: 18, fontWeight: FontWeight.w600),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            'assets/images/profile.png',
-                            width: 30,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Jhon Smith',
-                            style: primaryTextStyle.copyWith(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.grey),
-                          ),
-                          Spacer(),
-                          Text(
-                            '10 Jan 2020',
-                            style: primaryTextStyle.copyWith(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              child: BlocBuilder<NewsBloc, NewsState>(builder: (_, state) {
+                if (state is NewsLoaded) {
+                  List<Trending> trending = state.trending;
+
+                  return ListView.builder(
+                      itemCount: trending.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (_, index) => TrendingCard(
+                            trending: trending[index],
+                          ));
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              }),
             ),
             SizedBox(
               height: 20,
@@ -188,38 +137,27 @@ class MainPage extends StatelessWidget {
 
             //All News
             Container(
-              margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-              height: 350,
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                children: [
-                  NewsItem(
-                    name:
-                        'Palestina vs Israel Menggelar Agresi Militer, Kemenangan Untuk Palestina!',
-                    image: 'assets/images/news2.jpg',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  NewsItem(
-                    name:
-                        'Jokowi Diminta Pro-aktif Dalam Menyikapi Permasalahan Internal KPK',
-                    image: 'assets/images/news3.jpg',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  NewsItem(
-                    name:
-                        'KRI Nanggala 402 Nasibmu Kini: Eternal Patrol Status Baru KRI Nanggala 402',
-                    image: 'assets/images/news1.jpg',
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
-            )
+                margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+                height: 350,
+                child: BlocBuilder<NewsBloc, NewsState>(builder: (_, state) {
+                  if (state is NewsLoaded) {
+                    List<News> news = state.news;
+
+                    return ListView.builder(
+                      itemCount: news.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (_, index) => Container(
+                          margin: EdgeInsets.only(
+                              top: (index == 0) ? 0 : 20,
+                              bottom: (index == news.length - 1) ? 20 : 0),
+                          child: NewsItem(news[index])),
+                    );
+                  } else {
+                    return CircularProgressIndicator(
+                      backgroundColor: primaryColor,
+                    );
+                  }
+                })),
           ],
         ),
       ),

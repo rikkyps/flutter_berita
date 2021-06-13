@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String endPoint = 'https://newsapi.org/v2/top-headlines?country=id&pageSize=10&apiKey=';
+String endPoint = 'https://newsapi.org/v2/top-headlines?country=id&pageSize=100&apiKey=';
 String endPointTrending = 'https://newsapi.org/v2/top-headlines?country=id&pageSize=1&apiKey=';
 
 String apiKey = '2a5904e7a0d94d0bb0f2930b9bc33022';
